@@ -750,6 +750,8 @@ local function AddDefaultData()
           equipLocKey = equipLocKey,
           equipLoc = EQUIPLOC_DATA[equipLocKey][2],
           default = true,
+          gp1 = v[6],
+          gp2 = v[7],
         }
       end
     else

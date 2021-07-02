@@ -48,6 +48,24 @@ function EPGP:SetupOptions()
         desc = L["Resets GP (not EP!) of all members of the guild. This will set all main toons' GP to 0. Use with care!"],
         func = function() DLG:Spawn("EPGP_RESET_GP") end,
       },
+      allow_negative_ep = {
+        order = 2000,
+        type = "toggle",
+        name = L["ALLOW_NEGATIVE_EP_NAME"],
+        desc = L["ALLOW_NEGATIVE_EP_DESC"],
+        width = 30,
+        get = function() return self.db.profile.allow_negative_ep end,
+        set = function(info, v) self.db.profile.allow_negative_ep = v end,
+      },
+      remind_enable_combatlog = {
+        order = 2001,
+        type = "toggle",
+        name = L["COMBATLOG_REMIND_ENABLE_NAME"],
+        desc = L["COMBATLOG_REMIND_ENABLE_DESC"],
+        width = 30,
+        get = function() return self.db.profile.remind_enable_combatlog end,
+        set = function(info, v) self.db.profile.remind_enable_combatlog = v end,
+      },
     },
   }
 
@@ -122,7 +140,7 @@ function EPGP:ProcessCommand(str)
     local member, reason, amount = self:GetArgs(str, 3, nextpos)
     amount = tonumber(amount)
     if self:CanIncEPBy(reason, amount) then
-      self:IncEPBy(member, reason, amount)
+      self:IncEPBy(self:GetFullCharacterName(member), reason, amount)
     end
   elseif command == "gp" then
     local member, itemlink, amount = self:GetArgs(str, 3, nextpos)
@@ -139,7 +157,7 @@ function EPGP:ProcessCommand(str)
     end
 
     if self:CanIncGPBy(itemlink, amount) then
-      self:IncGPBy(member, itemlink, amount)
+      self:IncGPBy(self:GetFullCharacterName(member), itemlink, amount)
     end
   elseif command == "decay" then
     if EPGP:CanDecayEPGP() then

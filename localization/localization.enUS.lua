@@ -4,6 +4,8 @@ if not L then return end
 L["Accepting settings from [%s]..."] = true
 L["Add loot items automatically when loot windows opened or corpse loot received."] = true
 L["Adjust all main toons' GP?"] = true
+L["ALLOW_NEGATIVE_EP_DESC"] = "Allow someone's EP be a negative integer. Test feature, don't know if have bugs."
+L["ALLOW_NEGATIVE_EP_NAME"] = "Allow negative EP (test feature)"
 L["Allow adding [name] into standby list by whispering \"epgp standby [name]\" if enabled."] = true
 L["Allow whisper for others"] = true
 L["Alts"] = true
@@ -35,8 +37,23 @@ L["Bid medium"] = true
 L["Blackwing Lair"] = true
 L["Bonus roll for %s (%s left): got %s (ilvl %d)"] = true
 L["Bonus roll for %s (%s left): got gold"] = true
+L["BOSS_AUTO_REWARD_DESC"] = "Automatically reward EP to the raid after a boss kill/wipe. Requires DBM. If an input box is empty, the origin reward popup will shown when kill/wipe the relative boss."
+L["BOSS_AUTO_REWARD_NAME"] = "Automatic EP Reward"
+L["BOSS_AUTO_REWARD_START"] = "Start automatically reward for boss kill/wipe."
+L["BOSS_AUTO_REWARD_STOP"] = "Stop automatically reward for boss kill/wipe."
+L["BOSS_KILL_AUTO_AWARD_0_EP_DESC"] = "Boss kill auto award EP of [%s] was set to 0. Skip."
+L["BOSS_WIPE_AUTO_AWARD_0_EP_DESC"] = "Boss wipe auto award EP of [%s] was set to 0. Skip."
 L["Clear"] = true
 L["Collect bid/roll message to help sorting"] = true
+L["COMBATLOG_ENABLE_FAIL"] = "Failed to enable combatlog. Please try it manually (/combatlog)."
+L["COMBATLOG_ENABLE_REMIND_MSG"] = [=[EPGP reminder
+Would you like to enable combatlog? (/combatlog)]=]
+L["COMBATLOG_IS_LOGGING"] = "Combatlog is logging (/combatlog)."
+L["COMBATLOG_REMIND_ENABLE_DESC"] = [=[Remind to enable combatlog when:
+1. Join a raid
+2. Entering world when in a raid
+This is a testing feature.]=]
+L["COMBATLOG_REMIND_ENABLE_NAME"] = "Remind enable combatlog (testing)"
 L["Comment %d"] = true
 L["Credit GP"] = true
 L["Credit GP to %s"] = true
@@ -53,6 +70,12 @@ L["Decay EP and GP by %d%%?"] = true
 L["Decay of EP/GP by %d%%"] = true
 L["Decay Percent should be a number between 0 and 100"] = true
 L["default"] = true
+L["DIST_ANNOUNCE_PR_FMT_DESC"] = [=[Default:
+${char} EP:${ep} GP:${gp} PR:${pr}
+
+Additional Variables:
+${bid}"]=]
+L["DIST_ANNOUNCE_PR_FMT_NAME"] = "EP/GP/PR announce message format"
 L["Distribution"] = true
 L["%+d EP (%s) to %s"] = true
 L["%+d GP (%s) to %s"] = true
@@ -63,8 +86,6 @@ L["EPGP decay"] = true
 L["EPGP is an in game, relational loot distribution system"] = true
 L["EPGP is using Officer Notes for data storage. Do you really want to edit the Officer Note by hand?"] = true
 L["EP/GP/PR announce medium"] = true
-L["EP/GP/PR announce text"] = true
-L["Default:\n${char} EP:${ep} GP:${gp} PR:${pr}\n\nAdditional Variables:\n${bid}"] = true
 L["EPGP reset"] = true
 L["EP Reason"] = true
 L["Equation"] = true
@@ -94,10 +115,17 @@ L["Import"] = true
 L["Importing data snapshot taken at: %s"] = true
 L["invalid input"] = true
 L["Invalid officer note [%s] for %s (ignored)"] = true
+L["kill"] = true
 L["Legendary Scale"] = true
 L["List errors"] = true
 L["Lists errors during officer note parsing to the default chat frame. Examples are members with an invalid officer note."] = true
 L["Logs"] = true
+L["LOOT_ITEM_LOG_HEADER"] = "Loot log"
+L["LOOT_ITEM_LOG_CLEAR_MSG"] = "Loot log has been cleared."
+L["LOOT_ITEM_LOG_CLEAR_NAME"] = "Clear loot log"
+L["LOOT_ITEM_LOG_SHOW_NUMBER_NAME"] = "Max number of logs"
+L["LOOT_RECORD_ITEM_LOG_DESC"] = "Record loot log. Show loot history in item's tooltip."
+L["LOOT_RECORD_ITEM_LOG_NAME"] = "Record loot log"
 L["Loot list: "] = true
 L["Loot list is almost full (%d/%d)."] = true
 L["Loot list is full (%d). %s will not be added into list."] = true
@@ -114,6 +142,9 @@ L["must be equal to or higher than %s"] = true
 L["must be equal to or lower than %s"] = true
 L["Naxxramas"] = true
 L["Need/greed medium"] = true
+L["NEW_VERSION_INTRO_1_5_0"] = [=[New features:
+1. Boss kill/wipe auto reward. Enable and config in %s -> %s -> EPGP -> %s.
+2. Loot log. Enable and config in %s -> %s -> EPGP -> %s.]=]
 L["Next award in "] = true
 L["Non-hunter"] = true
 L["Non-tank"] = true
@@ -179,6 +210,7 @@ L["[%s] has been added into trust list."] = true
 L["[%s] has been updated."] = true
 L["Show everyone"] = true
 L["Show item level"] = true
+L["Should be a non-negative integer"] = true
 L["should be a none-zero integer"] = true
 L["should be a positive integer"] = true
 L["'%s' - Invalid Keybinding."] = true
@@ -190,7 +222,6 @@ L["%s is not eligible for EP awards"] = true
 L["%s is not in the award list now. Whisper me 'epgp standby' to enlist again."] = true
 L["%s is now removed from the award list. Whisper me 'epgp standby' to enlist again."] = true
 L["Slots"] = true
-L["Some 3rd-party EPGP system were launched. Details in: EPGP -> %s -> %s"] = true
 L["Some english word"] = true
 L["Some english word that doesn't exist"] = true
 L["%s %s"] = true
@@ -227,8 +258,10 @@ L["Use custom global configuration"] = true
 L["Using %s for boss kill tracking"] = true
 L["Value"] = true
 L["Web & WeChat Mini Program"] = true
+L["WHETHER_TO_START_BOSS_AUTO_REWARD"] = "EPGP: whether to start automatically reward for boss kill/wipe?"
 L["When a new tier comes, you may like to increase [standard_ilvl]. That can avoid large gear points. If you do that, a GP rescaling is recommended. Everyone's GP will be changed."] = true
 L["Whisper"] = true
+L["wipe"] = true
 L["Wipe awards"] = true
 L["Wiped on %s. Award EP?"] = true
 L["Write into Guild Info"] = true

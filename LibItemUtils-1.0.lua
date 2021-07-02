@@ -18,7 +18,7 @@ local LBIR = LibStub("LibBabble-Inventory-3.0"):GetReverseLookupTable()
 local deformat = LibStub("LibDeformat-3.0")
 
 -- Make a frame for our repeating calls to GetItemInfo.
-lib.frame = lib.frame or CreateFrame("Frame", MAJOR_VERSION .. "_Frame")
+lib.frame = lib.frame or CreateFrame("Frame", MAJOR_VERSION .. "_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate");
 local frame = lib.frame
 frame:Hide()
 frame:SetScript('OnUpdate', nil)
@@ -360,7 +360,7 @@ end
 
 function lib:ClassesThatCanUse(item, t)
   t = NewTableOrClear(t)
-  for class, _ in pairs(RAID_CLASS_COLORS) do
+  for class, _ in pairs(_G.RAID_CLASS_COLORS) do
     if self:ClassCanUse(class, item) then
       table.insert(t, class)
     end
@@ -370,7 +370,7 @@ end
 
 function lib:ClassesThatCannotUse(item, t)
   t = NewTableOrClear(t)
-  for class, _ in pairs(RAID_CLASS_COLORS) do
+  for class, _ in pairs(_G.RAID_CLASS_COLORS) do
     if self:ClassCannotUse(class, item) then
       table.insert(t, class)
     end

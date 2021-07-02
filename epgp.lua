@@ -204,7 +204,7 @@ function EPGP:DecodeNote(note)
     if note == "" then
       return 0, 0
     else
-      local ep, gp = string.match(note, "^(%d+),(%d+)$")
+      local ep, gp = string.match(note, "^(-?%d+),(%d+)$")
       if ep then
         return tonumber(ep), tonumber(gp)
       end
@@ -213,8 +213,11 @@ function EPGP:DecodeNote(note)
 end
 
 local function EncodeNote(ep, gp)
-  return string.format("%d,%d",
-                       math.max(ep, 0),
+  local ep = ep
+  if not EPGP.db.profile.allow_negative_ep then
+    ep = math.max(ep, 0)
+  end
+  return string.format("%d,%d", ep,
                        math.max(gp - EPGP.db.profile.base_gp, 0))
 end
 
@@ -225,7 +228,7 @@ local function AddEPGP(name, ep, gp)
          string.format("%s is not a main!", tostring(name)))
 
   -- Compute the actual amounts we can add/subtract.
-  if (total_ep + ep) < 0 then
+  if (total_ep + ep) < 0 and not EPGP.db.profile.allow_negative_ep then
     ep = -total_ep
   end
   if (total_gp + gp) < 0 then
@@ -302,7 +305,7 @@ local comparators = {
          end
 
          if a_bid == b_bid then
-           return a_ep/a_gp > b_ep/b_gp
+           return a_ep / math.max(1, a_gp) > b_ep / math.max(1, b_gp)
          end
 
          if not a_bid then return false end
@@ -808,6 +811,7 @@ function EPGP:CanIncEPBy(reason, amount)
   return true
 end
 
+-- name must be the full character name contains realm.
 function EPGP:IncEPBy(name, reason, amount, mass, undo)
   -- When we do mass EP or decay we know what we are doing even though
   -- CanIncEPBy returns false
@@ -843,6 +847,7 @@ function EPGP:CanIncGPBy(reason, amount)
   return true
 end
 
+-- name must be the full character name contains realm.
 function EPGP:IncGPBy(name, reason, amount, mass, undo)
   -- When we do mass GP or decay we know what we are doing even though
   -- CanIncGPBy returns false
@@ -991,17 +996,18 @@ function EPGP:OnInitialize()
 
   local defaults = {
     profile = {
-      last_awards = {},
-      show_everyone = false,
-      sort_order = "PR",
-      recurring_ep_period_mins = 15,
-      decay_p = 0,
-      extras_p = 100,
-      min_ep = 0,
+      allow_negative_ep = false,
       base_gp = 1,
       bonus_loot_log = {},
-      manageRankAll = true,
+      decay_p = 0,
+      extras_p = 100,
+      last_awards = {},
       manageRank = {true, true, true, true, true, true, true, true, true, true},
+      manageRankAll = true,
+      min_ep = 0,
+      recurring_ep_period_mins = 15,
+      show_everyone = false,
+      sort_order = "PR",
     }
   }
 
@@ -1191,7 +1197,7 @@ function EPGP:GUILD_ROSTER_UPDATE()
     end
   else
     local guild = GetGuildInfo("player") or ""
-    -- local realm = GetRealmName()
+    local realm = GetRealmName()
     if #guild == 0 then
       GuildRoster()
     else
@@ -1208,6 +1214,9 @@ function EPGP:GUILD_ROSTER_UPDATE()
         for name, module in EPGP:IterateModules() do
           if not module.db or module.db.profile.enabled or not module.dbDefaults then
             Debug("Enabling module (startup): %s", name)
+            if module.CheckGuildConfig then
+              module:CheckGuildConfig(guild, realm)
+            end
             module:Enable()
           end
         end
@@ -1277,7 +1286,7 @@ function EPGP:OnEnable()
 
   self:RegisterEvent("PLAYER_ENTERING_WORLD")
 
-  UpdateFrame = UpdateFrame or CreateFrame("Frame")
+  UpdateFrame = UpdateFrame or CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate");
   UpdateFrame:SetScript("OnUpdate", nil)
 
   local function UpdateFrameOnUpdate(self, elapsed)

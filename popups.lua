@@ -1,6 +1,7 @@
-local L = LibStub("AceLocale-3.0"):GetLocale("EPGP")
-local GP = LibStub("LibGearPoints-1.3")
 local DLG = LibStub("LibDialog-1.0")
+local GP = LibStub("LibGearPoints-1.3")
+local L = LibStub("AceLocale-3.0"):GetLocale("EPGP")
+local LE = LibStub("AceLocale-3.0"):GetLocale("LibEncounters")
 
 DLG:Register("EPGP_CONFIRM_GP_CREDIT", {
   text = "Unknown Item",
@@ -49,7 +50,7 @@ DLG:Register("EPGP_CONFIRM_GP_CREDIT", {
     self.editboxes[1]:SetText(edit)
     self.editboxes[1]:HighlightText()
     if not self.icon_frame then
-      local icon_frame = CreateFrame("Frame", nil, self)
+      local icon_frame = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate");
       icon_frame:ClearAllPoints()
       icon_frame:SetAllPoints(self.icon)
       icon_frame:SetScript("OnEnter", function(self)
@@ -304,6 +305,25 @@ DLG:Register("EPGP_BOSS_ATTEMPT", {
   show_while_dead = true,
 })
 
+DLG:Register("EPGP_BOSS_AUTO_REWARD_ENABLE", {
+  text = L["WHETHER_TO_START_BOSS_AUTO_REWARD"],
+  buttons = {
+    {
+      text = _G.YES,
+      on_click = function(self)
+        EPGP:GetModule("boss"):EnableAutoReward()
+      end,
+    },
+    {
+      text = _G.NO,
+      on_click = function(self)
+        EPGP:GetModule("boss"):DisableAutoReward()
+      end,
+    },
+  },
+  show_while_dead = true,
+})
+
 DLG:Register("EPGP_LOOTMASTER_ASK_TRACKING", {
   text = "You are the Loot Master, would you like to use EPGP Lootmaster to distribute loot?\r\n\r\n(You will be asked again next time. Use the configuration panel to change this behaviour)",
   icon = [[Interface\DialogFrame\UI-Dialog-Icon-AlertNew]],
@@ -330,9 +350,10 @@ DLG:Register("EPGP_LOOTMASTER_ASK_TRACKING", {
 DLG:Register("EPGP_NEW_VERSION", {
   text = "|cFFFFFF00EPGP " .. EPGP.version .. "|r\n" ..
     L["You can now check your epgp standings and loot on the web: http://www.epgpweb.com"] .. "\n\n" ..
-    L["Some 3rd-party EPGP system were launched. Details in: EPGP -> %s -> %s"]:format(L["Logs"], L["Export Detail"]),
-    -- L["%s %s"]:format(L["[%s] is comming!"]:format(L["Blackwing Lair"]), L["You should probably: increase standard_ilvl, reset or rescale GP."]) .. "\n" ..
-    -- string.format("(%s -> %s -> EPGP -> %s / %s)", _G.UIOPTIONS_MENU, _G.ADDONS, L["Gear Points"], L["Rescale GP"]), -- /script EPGP.db.profile.last_version = nil
+    -- L["NEW_VERSION_INTRO_1_5_0"]:format(_G.UIOPTIONS_MENU, _G.ADDONS, _G.BOSS, _G.UIOPTIONS_MENU, _G.ADDONS, L["Logs"]),
+    -- L["Some 3rd-party EPGP system were launched. Details in: EPGP -> %s -> %s"]:format(L["Logs"], L["Export Detail"]),
+    L["%s %s"]:format(L["[%s] is comming!"]:format("TBC"), L["You should probably: increase standard_ilvl, reset or rescale GP."]) .. "\n" ..
+    string.format("(%s -> %s -> EPGP -> %s / %s)", _G.UIOPTIONS_MENU, _G.ADDONS, L["Gear Points"], L["Rescale GP"]), -- /script EPGP.db.profile.last_version = nil
   icon = [[Interface\DialogFrame\UI-Dialog-Icon-AlertNew]],
   buttons = {
     {
@@ -386,4 +407,26 @@ DLG:Register("EPGP_SETTINGS_RECEIVED", {
       text = _G.CANCEL,
     },
   }
+})
+
+DLG:Register("EPGP_REMIND_ENABLE_COMBATLOG", {
+  text = L["COMBATLOG_ENABLE_REMIND_MSG"],
+  icon = [[Interface\DialogFrame\UI-Dialog-Icon-AlertNew]],
+  buttons = {
+    {
+      text = _G.YES,
+      on_click = function(self)
+        if LoggingCombat(true) then
+          EPGP:Print(_G.COMBATLOGENABLED)
+        else
+          EPGP:Print(L["COMBATLOG_ENABLE_FAIL"])
+        end
+      end,
+    },
+    {
+      text = _G.NO,
+    },
+  },
+  hide_on_escape = true,
+  show_while_dead = true,
 })

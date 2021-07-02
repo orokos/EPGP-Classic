@@ -1,3 +1,38 @@
+### v1.6.4-tbc (2021.6.28)
+
+- Update the custom item list for TBC.
+
+### v1.6.2-tbc (2021.6.9)
+
+- Update raid/boss list for TBC.
+
+### v1.6.1-tbc (2021.6.4)
+
+- Update raid list for TBC.
+
+### v1.6.0-alpha (2021.6.4)
+
+- Upgrade libraries for TBC.
+- Update suggested standard ilvl for TBC.
+
+### v1.5.7 (2020.12.19)
+
+- ep and gp command allowing short name without realm (#52)
+
+### v1.5.6 (2020.12.2)
+
+- Standard ilvl update for NAXX.
+
+### v1.5.2 (2020.9.14)
+
+- Remind to enable combatlog. Default off.
+
+### v1.5.0 (2020.8.9)
+
+- New feature: boss kill/wipe reward
+- New feature: loot log (history)
+- Update log sync website
+
 ### v1.4.9 (2020.5.10)
 
 - Bug fix: can not get external EPGP (jpxthu/RCLootCouncil_EPGP_Classic#1)

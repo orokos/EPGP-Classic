@@ -189,8 +189,8 @@ mod.optionsArgs = {
   prAnnounceMsgFmt = {
     order = 14,
     type = "input",
-    name = L["EP/GP/PR announce text"],
-    desc = L["Default:\n${char} EP:${ep} GP:${gp} PR:${pr}\n\nAdditional Variables:\n${bid}"],
+    name = L["DIST_ANNOUNCE_PR_FMT_NAME"],
+    desc = L["DIST_ANNOUNCE_PR_FMT_DESC"],
     width = 100 ,
   },
   -- spacer1 = LUI:OptionsSpacer(13, 0.001),
@@ -254,7 +254,7 @@ end
 local function AddLootControlItems(frame, topItem, index)
   local authority = CanEditOfficerNote()
 
-  local f = CreateFrame("Frame", nil, frame)
+  local f = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate");
   f:SetPoint("LEFT")
   f:SetPoint("RIGHT")
   f:SetPoint("TOP", topItem, "BOTTOMLEFT")
@@ -265,7 +265,7 @@ local function AddLootControlItems(frame, topItem, index)
   icon:SetPoint("LEFT")
   icon:SetPoint("TOP")
 
-  local iconFrame = CreateFrame("Frame", nil, f)
+  local iconFrame = CreateFrame("Frame", nil, f, BackdropTemplateMixin and "BackdropTemplate");
   iconFrame:ClearAllPoints()
   iconFrame:SetAllPoints(icon)
   iconFrame:SetScript("OnEnter", LootItemIconFrameOnEnterFunc)
